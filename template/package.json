@@ -1,0 +1,16 @@
+{
+  "name": "koa2-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development node build/addon/server-watch.js & nodemon --exec yarn babel-node server/app.js"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "cross-env": "^5.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}
