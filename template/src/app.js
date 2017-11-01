@@ -25,5 +25,5 @@ router.get('*', ctx => {
 app.use(router.routes())
 app.use(router.allowedMethods())
 app.listen(config.port || 9090, function () {
-  console.log(('服务启动成功，请访问: http://localhost:' + (config.port || 9090) + '/api/').green)
+  console.log(colors.green('服务启动成功，请访问: ') + 'http://localhost:' + (config.port || 9090) + '/api/')
 })

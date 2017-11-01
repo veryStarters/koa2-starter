@@ -5,6 +5,6 @@ export const RequestLog = async (ctx, next) => {
   const start = new Date()
   await next()
   const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} ${ctx.status} ${ms}ms`.green)
-  console.log(`${JSON.stringify(ctx.response.body).replace(/\\/g, '')}`.blue)
+  console.log(colors.green(`${ctx.method} ${ctx.url} ${ctx.status} ${ms}ms`))
+  console.log(colors.blue(`${JSON.stringify(ctx.response.body).replace(/\\/g, '')}`))
 }
