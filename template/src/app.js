@@ -1,6 +1,7 @@
 import 'module-alias/register'
 import Koa from 'koa'
 import Router from 'koa-router'
+import colors from 'colors'
 import * as routes from './controllers/router'
 import * as middlewares from './middlewares'
 import config from './config'
@@ -24,5 +25,5 @@ router.get('*', ctx => {
 app.use(router.routes())
 app.use(router.allowedMethods())
 app.listen(config.port || 9090, function () {
-  console.log('服务启动成功，请访问http://localhost:' + (config.port || 9090) + '/api/index')
+  console.log(('服务启动成功，请访问: http://localhost:' + (config.port || 9090) + '/api/').green)
 })
