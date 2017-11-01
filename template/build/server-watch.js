@@ -4,9 +4,9 @@ var readLine = require('readline')
 var shell = require('shelljs')
 var mkdirp = require('mkdirp')
 var chokidar = require('chokidar')
-var routeFile = path.join(__dirname, '../../server/controllers/router.js')
-var controllerDir = path.join(__dirname, '../../server/controllers')
-var template = require('./template/server-template.js')
+var routeFile = path.join(__dirname, '../src/controllers/router.js')
+var controllerDir = path.join(__dirname, '../src/controllers')
+var template = require('./server-template.js')
 var startTime = Date.now()
 var blocks = {}
 fs.writeFile(routeFile, '', function () {
@@ -62,9 +62,9 @@ fs.watchFile(routeFile, {
     terminal: false
   });
   rd.on('line', function (line) {
-    var matches = line.match(/require\('\.\/controllers\/(.*)'\)/)
+    var matches = line.match(/require\('\.\.\/controllers\/(.*)'\)/)
     if (!matches || !matches[1]) return;
-    var controllerPath = path.join(__dirname, '../../server/controllers', matches[1] )
+    var controllerPath = path.join(__dirname, '../src/controllers', matches[1] )
     var controllerName = path2name(controllerPath.replace(/.*controllers\//, ''))
     var controllerFile = controllerPath + '.js'
     var controllerDir = controllerPath.substr(0, controllerPath.lastIndexOf('/') + 1)

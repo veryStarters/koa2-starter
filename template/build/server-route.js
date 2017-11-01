@@ -1,7 +1,7 @@
 var fs = require('fs')
 var path = require('path')
-var routeFile = path.join(__dirname, '../../server/controllers/router.js')
-var dir = path.join(__dirname, '../../server/controllers/')
+var routeFile = path.join(__dirname, '../src/controllers/router.js')
+var dir = path.join(__dirname, '../src/controllers/')
 fs.writeFile(routeFile, '', function () {
   walk(dir)
 })
