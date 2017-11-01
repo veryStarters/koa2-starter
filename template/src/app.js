@@ -11,9 +11,15 @@ Object.values(middlewares).forEach(middleware => {
 const router = new Router({
   prefix: '/api'
 })
+router.get('/', routes['index'].default)
+
 Object.keys(routes).forEach(routeName => {
   let routePath = '/' + routeName.replace(/([A-Z])/g, "/$1").toLowerCase()
   router.all(routePath, routes[routeName].default)
+})
+
+router.get('*', ctx => {
+  ctx.body = '<p style="text-align: center; line-height: 2; font-size: 40px"> 4 0 4 <p>'
 })
 app.use(router.routes())
 app.use(router.allowedMethods())
