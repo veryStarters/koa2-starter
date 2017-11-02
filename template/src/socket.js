@@ -23,7 +23,7 @@ socketRouter.all('/websocket', (ctx) => {
   dispatch('<span style="color: green">[' + address.ip() + '] 加入了聊天室！</span>')
   ctx.websocket.on('message', (message) => {
     message = JSON.parse(message || '{}')
-    dispatch('[' + address.ip() + '] : ' + message.content)
+    dispatch('<span style="color: green">[' + address.ip() + '] :</span> <span style="color: red">' + message.content + '</span>')
   })
   ctx.websocket.on('close', () => {
     ctxes = ctxes.filter(client => {
