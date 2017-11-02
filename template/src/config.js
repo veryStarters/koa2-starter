@@ -6,6 +6,6 @@ export default {
   allowedOrigin: {
     'http://localhost:8080': true
   },
-  needSocket: false,
+  needSocket: true,
   socketPort: 9999
 }

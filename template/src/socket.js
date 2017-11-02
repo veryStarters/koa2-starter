@@ -20,7 +20,7 @@ const dispatch = (msg) => {
 }
 socketRouter.all('/websocket', (ctx) => {
   ctxes.push(ctx)
-  dispatch('<span style="color: green">来自 [' + address.ip() + '] 的朋友加入了聊天室！</span>')
+  dispatch('<span style="color: green">[' + address.ip() + '] 加入了聊天室！</span>')
   ctx.websocket.on('message', (message) => {
     message = JSON.parse(message || '{}')
     dispatch('[' + address.ip() + '] : ' + message.content)
@@ -29,7 +29,7 @@ socketRouter.all('/websocket', (ctx) => {
     ctxes = ctxes.filter(client => {
       return ctx !== client
     })
-    dispatch('[' + address.ip() + '] 离开了聊天室！')
+    dispatch('<span style="color: green">[' + address.ip() + '] 离开了聊天室！</span>')
   })
 })
 app.ws.use(socketRouter.routes())
