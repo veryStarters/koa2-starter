@@ -6,16 +6,20 @@
   "scripts": {
     "babel-node": "babel-node",
     "start": "cross-env NODE_ENV=development node build/server-watch.js & nodemon --exec yarn babel-node src/app.js",
-    "deploy": "cross-env NODE_ENV=production node build/server-route.js & pm2 start src/app.js --interpreter ./node_modules/.bin/babel-node --name \"koa2\" --max-memory-restart 400M"
+    "deploy": "cross-env NODE_ENV=production node build/server-route.js & pm2 start src/app.js --interpreter ./node_modules/.bin/babel-node --name \"koa2\" --max-memory-restart 400M",
+    "socket": "cross-env NODE_ENV=develoment nodemon --exec yarn babel-node src/socket.js"
   },
   "dependencies": {
+    "address": "^1.0.3",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "bluebird": "^3.5.1",
     "colors": "^1.1.2",
     "cross-env": "^5.1.1",
     "koa": "^2.3.0",
     "koa-router": "^7.2.1",
+    "koa-websocket": "^4.0.0",
     "module-alias": "^2.0.2",
     "mongoose": "^4.12.5",
     "pm2": "^2.7.2"

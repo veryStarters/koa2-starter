@@ -1,7 +1,7 @@
 import 'module-alias/register'
 import Koa from 'koa'
 import Router from 'koa-router'
-import colors from 'colors'
+import socket from './socket'
 import * as routes from './controllers/router'
 import * as middlewares from './middlewares'
 import config from './config'
@@ -24,6 +24,11 @@ router.get('*', ctx => {
 })
 app.use(router.routes())
 app.use(router.allowedMethods())
-app.listen(config.port || 9090, function () {
-  console.log(colors.green('服务启动成功，请访问: ') + 'http://localhost:' + (config.port || 9090) + '/api/')
+app.listen(config.port || 9090, () => {
+  console.log('HTTP服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/api/')
 })
+if (config.needSocket) {
+  socket.listen(config.socketPort || 9999, () => {
+    console.log('SOCKET服务启动成功，请访问: '.green + 'ws://localhost:' + (config.socketPort || 9090) + '/websocket')
+  })
+}

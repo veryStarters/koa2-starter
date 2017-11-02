@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>迷你聊天室</title>
+</head>
+<body>
+<p>聊天内容：<input type="text" name="content" /></p>
+<input type="button" value="发送" id="send" />
+<div class="content">
+
+</div>
+</body>
+<script type="text/javascript">
+  /* 封装 WebSocket 实例化的方法  */
+  var initWebSocket = (function () {
+    return function (urlValue) {
+      if(window.WebSocket) return new WebSocket(urlValue);
+      if(window.MozWebSocket) return new MozWebSocket(urlValue);
+      return false;
+    }
+  })();
+  var $ = function (select) {
+    return document.querySelector(select)
+  }
+  var webSocket = initWebSocket("ws://localhost:9999/websocket");
+  webSocket.onmessage = function (msg) {
+    let p = document.createElement('P')
+    p.innerHTML = msg.data
+    $('.content').appendChild(p)
+  };
+  webSocket.onclose = function () {
+    console.log("关闭连接");
+  };
+  $("#send").onclick = function () {
+    let $content = $('input[name=content]')
+    webSocket.send(JSON.stringify({
+      content: $content.value
+    }));
+    $content.value = ''
+  }
+</script>
+</html>
