@@ -1,6 +1,8 @@
 import 'module-alias/register'
 import Koa from 'koa'
 import Router from 'koa-router'
+import Views from 'koa-views'
+import path from 'path'
 import socket from './socket'
 import * as routes from './controllers/router'
 import * as middlewares from './middlewares'
@@ -9,13 +11,14 @@ const app = new Koa()
 Object.values(middlewares).forEach(middleware => {
   app.use(middleware)
 })
-const router = new Router({
-  prefix: '/api'
-})
-router.get('/', routes['index'].default)
-
+app.use(Views(path.join(__dirname, './pages'), {
+  extension: 'ejs'
+}))
+const router = new Router()
+router.get('/', routes['pages'].default)
+router.get('/pages*', routes['pages'].default)
 Object.keys(routes).forEach(routeName => {
-  let routePath = '/' + routeName.replace(/([A-Z])/g, "/$1").toLowerCase()
+  let routePath = '/api/' + routeName.replace(/([A-Z])/g, "/$1").toLowerCase()
   router.all(routePath, routes[routeName].default)
 })
 
