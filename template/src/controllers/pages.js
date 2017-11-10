@@ -7,7 +7,7 @@
  */
 export default ctx => {
   let req = ctx.request
-  let path = req.path.replace('/pages/', '') || 'index'
+  let path = req.path.replace(/\/pages\/?/, '') || 'index'
   let query = req.query
   return ctx.render(path, query || {})
 }

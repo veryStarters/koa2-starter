@@ -28,10 +28,10 @@ router.get('*', ctx => {
 app.use(router.routes())
 app.use(router.allowedMethods())
 app.listen(config.port || 9090, () => {
-  console.log('HTTP服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/api/')
+  console.log('HTTP服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/pages')
 })
 if (config.needSocket) {
   socket.listen(config.socketPort || 9999, () => {
-    console.log('SOCKET服务启动成功，请访问: '.green + 'ws://localhost:' + (config.socketPort || 9090) + '/websocket')
+    console.log('SOCKET服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/pages/chat-room')
   })
 }
