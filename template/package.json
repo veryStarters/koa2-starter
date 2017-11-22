@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "babel-node": "babel-node",
-    "start": "cross-env NODE_ENV=development node build/server-watch.js & nodemon --exec yarn babel-node src/app.js",
+    "start": "cross-env NODE_ENV=development node build/server-watch.js & nodemon --exec babel-node src/app.js",
     "deploy": "cross-env NODE_ENV=production node build/server-route.js & pm2 start src/app.js --interpreter ./node_modules/.bin/babel-node --name \"koa2\" --max-memory-restart 400M",
     "socket": "cross-env NODE_ENV=develoment nodemon --exec yarn babel-node src/socket.js"
   },
@@ -19,7 +18,9 @@
     "cross-env": "^5.1.1",
     "ejs": "^2.5.7",
     "koa": "^2.3.0",
+    "koa-body": "^2.5.0",
     "koa-router": "^7.2.1",
+    "koa-static": "^4.0.2",
     "koa-views": "^6.1.1",
     "koa-websocket": "^4.0.0",
     "module-alias": "^2.0.2",
@@ -34,8 +35,8 @@
     "shelljs": "^0.7.8"
   },
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">=7.6.0",
+    "npm": ">=5.0.0"
   },
   "_moduleAliases": {
     "server": "./src/",

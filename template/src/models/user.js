@@ -1,9 +1,7 @@
 import db from 'db'
 import UserSchema from 'schemas/user'
 const UserModel = db.model('User', UserSchema)
-UserModel.findByName = function (name) {
-  return UserModel.find({
-    name: name
-  }).exec()
+UserModel.findUsers = function () {
+  return UserModel.find().exec()
 }
 export default UserModel
