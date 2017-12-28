@@ -18,7 +18,7 @@ const dispatch = (msg) => {
     }
   })
 }
-socketRouter.all('/websocket', (ctx) => {
+socketRouter.get('/websocket', (ctx) => {
   ctxes.push(ctx)
   dispatch('<span style="color: green">[' + address.ip() + '] 加入了聊天室！</span>')
   ctx.websocket.on('message', (message) => {

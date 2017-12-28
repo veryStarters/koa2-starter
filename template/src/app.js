@@ -1,26 +1,32 @@
 import 'module-alias/register'
+import 'babel-polyfill'
 import Koa from 'koa'
-import Router from 'koa-router'
-import Static from 'koa-static'
-import Body from 'koa-body'
-import Views from 'koa-views'
+import KoaRouter from 'koa-router'
+import koaStatic from 'koa-static'
+import koaBody from 'koa-body'
+import koaViews from 'koa-views'
 import path from 'path'
 import socket from './socket'
-import * as routes from './controllers/router'
-import * as middlewares from './middlewares'
+import * as routes from './controllers/routes'
+import * as middleWares from './middlewares'
+import dispatcher from './dispatcher'
 import config from './config'
+import './mongodb'
 
 const app = new Koa()
-app.use(Static(path.join(__dirname, config.staticPath)))
-app.use(Body())
-Object.values(middlewares).forEach(middleware => {
-  app.use(middleware)
+app.use(koaStatic(path.join(__dirname, config.staticPath)))
+app.use(koaBody({multipart: true}))
+Object.values(middleWares).forEach(middleWare => {
+  middleWare = typeof middleWare === 'function' ? middleWare : middleWare.default
+  app.use(middleWare)
 })
-app.use(Views(path.join(__dirname, './pages'), {
-  extension: 'ejs'
+app.use(koaViews(path.join(__dirname, './pages'), {
+  extension: 'html',
+  map: {
+    html: 'ejs'
+  }
 }))
-const router = new Router()
-const dispatcher = routes.dispatcher.default
+const router = new KoaRouter()
 router.get('/', dispatcher)
 router.get('/pages*', dispatcher)
 Object.keys(routes).forEach(routeName => {
