@@ -3,10 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>迷你IM</title>
+  <style>
+    input {
+      border: 1px solid #ddd;
+      padding: 4px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+  </style>
 </head>
 <body>
 <h1>迷你IM</h1>
-<p>聊天内容：<input type="text" name="content" /> <input type="button" value="发送" id="send" /></p>
+<p>聊天内容：<input type="text" name="content"/> <input type="button" value="发送" id="send"/></p>
 
 <div class="content">
 
@@ -14,31 +22,33 @@
 </body>
 <script type="text/javascript">
   /* 封装 WebSocket 实例化的方法  */
-  let initWebSocket = (function () {
-    return function (urlValue) {
-      if(window.WebSocket) return new WebSocket(urlValue)
-      if(window.MozWebSocket) return new MozWebSocket(urlValue)
-      return false;
-    }
-  })();
+  let initWebSocket = function (urlValue) {
+    if (window.WebSocket) return new WebSocket(urlValue)
+    if (window.MozWebSocket) return new MozWebSocket(urlValue)
+    return false
+  }
   let $ = function (select) {
     return document.querySelector(select)
   }
   let webSocket = initWebSocket("ws://localhost:9999/websocket")
-  webSocket.onmessage = function (msg) {
-    let p = document.createElement('P')
-    p.innerHTML = msg.data
-    $('.content').appendChild(p)
-  }
-  webSocket.onclose = function () {
-    console.log("关闭连接")
-  }
-  $("#send").onclick = function () {
-    let $content = $('input[name=content]')
-    webSocket.send(JSON.stringify({
-      content: $content.value
-    }))
-    $content.value = ''
+  if (!webSocket) {
+    console.log('当前浏览器不支持websocket！')
+  } else {
+    webSocket.onmessage = function (msg) {
+      let p = document.createElement('P')
+      p.innerHTML = msg.data
+      $('.content').appendChild(p)
+    }
+    webSocket.onclose = function () {
+      console.log("关闭连接")
+    }
+    $("#send").onclick = function () {
+      let $content = $('input[name=content]')
+      webSocket.send(JSON.stringify({
+        content: $content.value
+      }))
+      $content.value = ''
+    }
   }
 </script>
 </html>

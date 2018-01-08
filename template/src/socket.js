@@ -9,27 +9,32 @@ import address from 'address'
 const app = WebSocket(new Koa())
 const socketRouter = new Router()
 
-let ctxes = []
+let clients = []
 const dispatch = (msg) => {
-  ctxes.forEach(client => {
+  clients.forEach(client => {
     try {
-      client.websocket.send(msg)
+      client.ctx.websocket.send(msg)
     } catch (err) {
     }
   })
 }
 socketRouter.get('/websocket', (ctx) => {
-  ctxes.push(ctx)
-  dispatch('<span style="color: green">[' + address.ip() + '] 加入了聊天室！</span>')
+  clients.push({
+    ctx: ctx,
+    createTime: Date.now(),
+    updateTime: Date.now()
+  })
+  let ip = address.ip()
+  dispatch(`<span style="color: green">[${ip}] 加入了聊天室！</span>`)
   ctx.websocket.on('message', (message) => {
     message = JSON.parse(message || '{}')
-    dispatch('<span style="color: green">[' + address.ip() + '] :</span> <span style="color: red">' + message.content + '</span>')
+    dispatch(`<span style="color: green">[${ip}] :</span> <span style="color: red">${message.content}</span>`)
   })
   ctx.websocket.on('close', () => {
-    ctxes = ctxes.filter(client => {
-      return ctx !== client
+    clients = clients.filter(client => {
+      return ctx !== client.ctx
     })
-    dispatch('<span style="color: green">[' + address.ip() + '] 离开了聊天室！</span>')
+    dispatch(`<span style="color: green">[${ip}] 离开了聊天室！</span>`)
   })
 })
 app.ws.use(socketRouter.routes())

@@ -3,5 +3,9 @@
  * 设置ctx.body即可向客户端response数据
  */
 export default async ctx => {
-  ctx.body = 'hello, userUpdate! '
+  try {
+    ctx.body = 'hello, userUpdate! '
+  } catch (e) {
+    console.log(e)
+  }
 }

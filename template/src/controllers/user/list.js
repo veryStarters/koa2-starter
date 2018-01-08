@@ -8,6 +8,7 @@ export default async ctx => {
     let users = await User.findUsers()
     ctx.body = 'hello, ' + JSON.stringify(users)
   } catch (e) {
+    ctx.body = '121312'
     console.log(e)
   }
 }
