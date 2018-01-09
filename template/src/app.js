@@ -31,10 +31,10 @@ initRouter(app, {
   viewExt: 'html'
 })
 app.listen(config.port || 9090, () => {
-  console.log('HTTP服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/pages')
+  console.log('HTTP服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090))
 })
 if (config.needSocket) {
   socket.listen(config.socketPort || 9999, () => {
-    console.log('SOCKET服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/pages/chat-room')
+    console.log('SOCKET服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/chat-room')
   })
 }
