@@ -7,7 +7,7 @@ import koaViews from 'koa-views'
 import path from 'path'
 import socket from './socket'
 import * as middleWares from './middlewares'
-import dispatcher from './dispatcher'
+import initRouter from './initRouter'
 import config from './config'
 import './mongo'
 
@@ -24,12 +24,12 @@ Object.values(middleWares).forEach(middleWare => {
   middleWare = typeof middleWare === 'function' ? middleWare : middleWare.default
   app.use(middleWare)
 })
-app.use(dispatcher({
+initRouter(app, {
   apiPrefix: '/api',
   apiRoot: path.join(__dirname, 'controllers/'),
   viewRoot: path.join(__dirname, 'pages/'),
   viewExt: 'html'
-}))
+})
 app.listen(config.port || 9090, () => {
   console.log('HTTP服务启动成功，请访问: '.green + 'http://localhost:' + (config.port || 9090) + '/pages')
 })
