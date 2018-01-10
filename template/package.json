@@ -28,7 +28,8 @@
     "module-alias": "^2.0.2",
     "mongoose": "^4.12.5",
     "pm2": "^2.7.2",
-    "query-string": "^5.0.1"
+    "query-string": "^5.0.1",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "chokidar": "^1.7.0",
@@ -42,12 +43,11 @@
     "npm": ">=5.0.0"
   },
   "_moduleAliases": {
-    "server": "./src/",
     "config": "./src/config.js",
-    "db": "./src/db.js",
     "models": "./src/models/",
+    "cache": "./src/cache.js",
     "schemas": "./src/schemas/",
     "controllers": "./src/controllers/",
-    "services": "./src/services/"
+    "business": "./src/business/"
   }
 }
