@@ -6,7 +6,7 @@ Promise.promisifyAll(redis.RedisClient.prototype)
 const redisClient = redis.createClient(config.redis[process.env.NODE_ENV || 'development'])
 
 redisClient.on('error', err => {
-  console.log('Redis连接失败：'.red, err)
+  console.log('Redis连接失败: '.red, err)
 }).on('connect', () => {
   console.log('缓存服务连接成功！请通过: '.green, 'setCache 和 getCache 来设置和获取缓存内容')
 })
