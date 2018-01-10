@@ -1,5 +1,14 @@
 import User from 'models/user'
 
+// redis demo
+// import {setCache, getCache} from 'cache'
+// setCache('AppName', 'Koa2-Starter')
+//
+// setTimeout(async () => {
+//   let name = await getCache('AppName')
+//   console.log(name)
+// }, 2000)
+
 // user模块私有的middlewares
 export const middlewares = [
   async (ctx, next) => {

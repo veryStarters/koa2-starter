@@ -11,15 +11,6 @@ import initRouter from './initRouter'
 import config from './config'
 import './mongo'
 
-// redis demo
-// import {setCache, getCache} from 'cache'
-// setCache('AppName', 'Koa2-Starter')
-//
-// setTimeout(async () => {
-//   let name = await getCache('AppName')
-//   console.log(name)
-// }, 2000)
-
 const app = new Koa()
 app.use(koaStatic(path.join(__dirname, config.staticPath)))
 app.use(koaViews(path.join(__dirname, './pages'), {
