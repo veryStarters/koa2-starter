@@ -33,6 +33,9 @@ UserSchema.statics = {
   },
   findUsers: function () {
     return this.find().exec()
+  },
+  removeByName: function (name) {
+    return this.remove({name: name}).exec()
   }
 }
 

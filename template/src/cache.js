@@ -17,4 +17,7 @@ export const getCache = async (key) => {
 export const setCache = async (key, value) => {
   return redisClient.set(key, value)
 }
+export const removeCache = async (key) => {
+  return redisClient.del(key)
+}
 export default redisClient

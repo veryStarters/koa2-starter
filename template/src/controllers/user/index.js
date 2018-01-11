@@ -1,12 +1,16 @@
 import User from 'models/user'
 
-// redis demo
-// import {setCache, getCache} from 'cache'
+// // redis test case
+// import {setCache, getCache, removeCache} from 'cache'
 // setCache('AppName', 'Koa2-Starter')
 //
 // setTimeout(async () => {
 //   let name = await getCache('AppName')
 //   console.log(name)
+//   removeCache('AppName')
+//   setTimeout(async () => {
+//     console.log(await getCache('AppName'))
+//   })
 // }, 2000)
 
 // user模块私有的middlewares
@@ -63,6 +67,23 @@ export const info = {
   }
 }
 
+export const remove = {
+  route: '/user/remove/:name?',
+  method: 'get',
+  action: async (ctx) => {
+    console.log(ctx.params.name)
+    let name = ctx.params.name
+    if (name) {
+      let res = await User.removeByName(name)
+      let ret = res.result
+      if (ret.ok && ret.n) {
+        ctx.body = '用户删除成功'
+      } else {
+        ctx.body = '用户删除失败'
+      }
+    }
+  }
+}
 /**
  * 用户列表
  * @param ctx
@@ -90,7 +111,6 @@ export const list = async (ctx) => {
 /**
  * 创建用户
  * @param ctx
- * @param next
  * @returns {Promise.<void>}
  */
 export const add = async (ctx) => {
@@ -106,3 +126,4 @@ export const add = async (ctx) => {
     console.log(e)
   }
 }
+

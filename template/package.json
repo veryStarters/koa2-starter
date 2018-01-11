@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/app.js",
+    "start": "cross-env NODE_ENV=development node build/server-watch.js & nodemon --exec babel-node src/app.js",
     "deploy": "cross-env NODE_ENV=production pm2 start src/app.js --interpreter ./node_modules/.bin/babel-node --name \"koa2Starter\" --max-memory-restart 400M",
     "socket": "cross-env NODE_ENV=develoment nodemon --exec yarn babel-node src/socket.js"
   },
