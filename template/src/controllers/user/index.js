@@ -28,13 +28,19 @@ export const middlewares = [
 ]
 
 /**
- * 用户首页，自动转向到list
+ * 创建用户
  * @param ctx
  * @returns {Promise.<void>}
  */
-export default async (ctx) => {
+export const add = async (ctx) => {
   try {
-    ctx.redirect('/api/user/list')
+    let query = ctx.request.query
+    let user = new User({
+      name: query.name || '游客',
+      age: query.age || 18
+    })
+    let ret = await user.save()
+    ctx.body = ret && ret.name ? (ret.name + '创建成功') : (query.name + '创建失败')
   } catch (e) {
     console.log(e)
   }
@@ -109,19 +115,13 @@ export const list = async (ctx) => {
 }
 
 /**
- * 创建用户
+ * 用户首页，自动转向到list
  * @param ctx
  * @returns {Promise.<void>}
  */
-export const add = async (ctx) => {
+export default async (ctx) => {
   try {
-    let query = ctx.request.query
-    let user = new User({
-      name: query.name || '游客',
-      age: query.age || 18
-    })
-    let ret = await user.save()
-    ctx.body = ret && ret.name ? (ret.name + '创建成功') : (query.name + '创建失败')
+    ctx.redirect('/api/user/list')
   } catch (e) {
     console.log(e)
   }

@@ -29,13 +29,13 @@ UserSchema.method({
 
 UserSchema.statics = {
   findByName: function (name) {
-    return this.findOne({name: name}).exec()
+    return this.findOne({name: name})
   },
   findUsers: function () {
-    return this.find().exec()
+    return this.find()
   },
   removeByName: function (name) {
-    return this.remove({name: name}).exec()
+    return this.remove({name: name})
   }
 }
 
