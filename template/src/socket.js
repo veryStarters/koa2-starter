@@ -24,11 +24,13 @@ socketRouter.get('/websocket', (ctx) => {
     createTime: Date.now(),
     updateTime: Date.now()
   })
+  let rand = Math.floor(Math.random() * 100)
+  rand = rand < 10 ? '0' + rand : rand
   let ip = address.ip()
-  dispatch(`<span style="color: green">[${ip}] 加入了聊天室！</span>`)
+  dispatch(`<span style="color: #333">来自[${address.ip()}]的<span style="color: green">用户_${rand}</span>加入了聊天室！</span>`)
   ctx.websocket.on('message', (message) => {
     message = JSON.parse(message || '{}')
-    dispatch(`<span style="color: green">[${ip}] :</span> <span style="color: red">${message.content}</span>`)
+    dispatch(`<span style="color: green">用户_${rand}: </span> <span style="color: red">${message.content}</span>`)
   })
   ctx.websocket.on('close', () => {
     clients = clients.filter(client => {
