@@ -10,7 +10,8 @@ import dispatcher from './dispatcher'
 import config from 'config'
 import socket from 'utils/socket'
 import 'utils/mongo'
-
+import getLogger from 'utils/getLogger'
+const logger  = getLogger('app')
 const app = new Koa()
 app.use(koaStatic(path.join(__dirname, config.staticPath)))
 app.use(koaViews(path.join(__dirname, './pages'), {
@@ -31,10 +32,10 @@ dispatcher(app, {
   viewExt: 'html'
 })
 app.listen(config.port || 9090, () => {
-  console.log('HTTP服务启动成功，请访问: '.green, 'http://localhost:' + (config.port || 9090))
+  logger.info('HTTP服务启动成功，请访问: '.green, 'http://localhost:' + (config.port || 9090))
 })
 if (config.needSocket) {
   socket.listen(config.socketPort || 9999, () => {
-    console.log('SOCKET服务启动成功，请访问: '.green, 'http://localhost:' + (config.port || 9090) + '/chat-room')
+    logger.info('SOCKET服务启动成功，请访问: '.green, 'http://localhost:' + (config.port || 9090) + '/chat-room')
   })
 }

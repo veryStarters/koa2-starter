@@ -1,12 +1,8 @@
 .DS_Store
 node_modules/
 dist/
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .idea
-**/pages/routes.js
-**/components/routes.js
-**/children.js
-**/controllers/router.js
-

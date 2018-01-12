@@ -1,3 +1,4 @@
+import getLogger from 'utils/getLogger'
 /**
  * 导出外部中间件
  */
@@ -10,8 +11,24 @@ export const cors = require('./cors')
  * @returns {Promise.<void>}
  */
 export const requestLog = async (ctx, next) => {
-  const start = new Date()
+  let start = new Date()
   await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} ${ctx.status} ${ms}ms`.green)
+  let ms = new Date() - start
+  let logger = getLogger('request ')
+  let resLogger = getLogger('response')
+  let {method, url, status, body} = ctx
+  logger.info(`${method} ${decodeURIComponent(url)} ${status} ${ms}ms ${ctx.request.headers['user-agent']}`)
+  if (url.indexOf('/api') === 0) {
+    resLogger.info(`${typeof body === 'object' ? JSON.stringify(body) : body }`)
+  }
+}
+
+export const errorLog = async (ctx, next) => {
+  try {
+    await next()
+  } catch (e) {
+    let logger = getLogger('runtime')
+    logger.error(e)
+    ctx.body = '系统异常, 请稍候再试!'
+  }
 }

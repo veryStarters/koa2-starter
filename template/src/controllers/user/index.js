@@ -1,5 +1,5 @@
 import User from 'models/user'
-
+import getLogger from 'utils/getLogger'
 // // redis test case
 // import {setCache, getCache, removeCache} from 'utils/cache'
 // setCache('AppName', 'Koa2-Starter')
@@ -13,18 +13,9 @@ import User from 'models/user'
 //   })
 // }, 2000)
 
+const logger = getLogger('user')
 // user模块私有的middlewares
 export const middlewares = [
-  async (ctx, next) => {
-    console.log('s1')
-    await next()
-    console.log('s2')
-  },
-  async (ctx, next) => {
-    console.log('s3')
-    await next()
-    console.log('s4')
-  }
 ]
 
 /**
@@ -36,11 +27,13 @@ export const add = async (ctx) => {
   try {
     let { name, age } = ctx.request.query
     if (!name) {
+      logger.info('新增用户信息时缺少name参数')
       ctx.body = '缺少必要的参数'
       return
     }
     let exist = await User.findByName(name)
     if (exist) {
+      logger.info('新增用户时存在同名用户')
       ctx.body = '已经存在的用户名：' + name
       return
     }
@@ -64,16 +57,23 @@ export const info = {
       let name = ctx.params.name
       if (!name) {
         ctx.body = '缺少必要的参数'
+        logger.info('请求用户信息时缺少name参数')
         return
       }
       let user = await User.findByName(name)
       if (!user) {
         ctx.body = '找不到该用户'
+        logger.info('请求用户信息时未找到对应用户')
         return
       }
-      ctx.body = `你好，${user.getName()}`
+      ctx.body = {
+        code: 0,
+        msg: '',
+        data: `你好，${user.getName()}`
+      }
     } catch (e) {
       console.log(e)
+      throw e
     }
   }
 }
@@ -82,7 +82,6 @@ export const remove = {
   route: '/user/remove/:name?',
   method: 'get',
   action: async (ctx) => {
-    console.log(ctx.params.name)
     let name = ctx.params.name
     if (name) {
       let res = await User.removeByName(name)

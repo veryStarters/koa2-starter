@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 import Promise from 'bluebird'
 import config from 'config'
+import getLogger from 'utils/getLogger'
+const logger = getLogger('db ')
 // 官方推荐使用bluebird代替原生的promise
 mongoose.Promise = Promise
 let uri = config.mongodbUri[process.env.NODE_ENV || 'development']
@@ -12,10 +14,10 @@ const conn = mongoose.connect(uri,
   },
   function (err) {
     if (err) {
-      console.error('数据库连接失败！请检查数据库连接及运行状态'.red)
+      logger.error('数据库连接失败！请检查数据库连接及运行状态')
       process.exit()
     } else {
-      console.log('数据库连接成功, 连接地址：'.green + uri)
+      logger.info('数据库连接成功, 连接地址：' + uri)
     }
   }
 )
