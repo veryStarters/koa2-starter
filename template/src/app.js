@@ -5,11 +5,11 @@ import koaStatic from 'koa-static'
 import koaBody from 'koa-body'
 import koaViews from 'koa-views'
 import path from 'path'
-import socket from './socket'
 import * as middleWares from './middlewares'
-import initRouter from './initRouter'
-import config from './config'
-import './mongo'
+import dispatcher from './dispatcher'
+import config from 'config'
+import socket from 'utils/socket'
+import 'utils/mongo'
 
 const app = new Koa()
 app.use(koaStatic(path.join(__dirname, config.staticPath)))
@@ -24,7 +24,7 @@ Object.values(middleWares).forEach(middleWare => {
   middleWare = typeof middleWare === 'function' ? middleWare : middleWare.default
   app.use(middleWare)
 })
-initRouter(app, {
+dispatcher(app, {
   apiPrefix: '/api',
   apiRoot: path.join(__dirname, 'controllers/'),
   viewRoot: path.join(__dirname, 'pages/'),

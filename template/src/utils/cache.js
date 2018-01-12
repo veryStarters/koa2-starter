@@ -1,6 +1,6 @@
 import redis from 'redis'
 import Promise from 'bluebird'
-import config from './config'
+import config from '../config/index'
 
 Promise.promisifyAll(redis.RedisClient.prototype)
 const redisClient = redis.createClient(config.redis[process.env.NODE_ENV || 'development'])

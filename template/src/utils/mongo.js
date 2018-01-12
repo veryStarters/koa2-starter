@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import Promise from 'bluebird'
-import config from './config'
+import config from 'config'
 // 官方推荐使用bluebird代替原生的promise
 mongoose.Promise = Promise
 let uri = config.mongodbUri[process.env.NODE_ENV || 'development']

@@ -1,7 +1,7 @@
 import User from 'models/user'
 
 // // redis test case
-// import {setCache, getCache, removeCache} from 'cache'
+// import {setCache, getCache, removeCache} from 'utils/cache'
 // setCache('AppName', 'Koa2-Starter')
 //
 // setTimeout(async () => {
@@ -34,13 +34,18 @@ export const middlewares = [
  */
 export const add = async (ctx) => {
   try {
-    let query = ctx.request.query
-    let user = new User({
-      name: query.name || '游客',
-      age: query.age || 18
-    })
-    let ret = await user.save()
-    ctx.body = ret && ret.name ? (ret.name + '创建成功') : (query.name + '创建失败')
+    let { name, age } = ctx.request.query
+    if (!name) {
+      ctx.body = '缺少必要的参数'
+      return
+    }
+    let exist = await User.findByName(name)
+    if (exist) {
+      ctx.body = '已经存在的用户名：' + name
+      return
+    }
+    let ret = await User.addUser()
+    ctx.body = name + '创建' + (ret && ret.name ? '成功' : '失败')
   } catch (e) {
     console.log(e)
   }
@@ -66,7 +71,7 @@ export const info = {
         ctx.body = '找不到该用户'
         return
       }
-      ctx.body = `你好，${user.name}`
+      ctx.body = `你好，${user.getName()}`
     } catch (e) {
       console.log(e)
     }
