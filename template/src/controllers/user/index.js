@@ -1,22 +1,7 @@
 import User from 'models/user'
+import List from './list'
 import getLogger from 'utils/getLogger'
-// // redis test case
-// import {setCache, getCache, removeCache} from 'utils/cache'
-// setCache('AppName', 'Koa2-Starter')
-//
-// setTimeout(async () => {
-//   let name = await getCache('AppName')
-//   console.log(name)
-//   removeCache('AppName')
-//   setTimeout(async () => {
-//     console.log(await getCache('AppName'))
-//   })
-// }, 2000)
-
 const logger = getLogger('user')
-// user模块私有的middlewares
-export const middlewares = [
-]
 
 /**
  * 创建用户
@@ -44,11 +29,33 @@ export const add = async (ctx) => {
   }
 }
 
+export const remove = {
+  route: '/user/remove/:name?',
+  method: 'get',
+  /**
+   * 删除用户
+   * @param ctx
+   * @returns {Promise.<void>}
+   */
+  action: async (ctx) => {
+    let name = ctx.params.name
+    if (name) {
+      let res = await User.removeByName(name)
+      let ret = res.result
+      if (ret.ok && ret.n) {
+        ctx.body = '用户删除成功'
+      } else {
+        ctx.body = '用户删除失败'
+      }
+    }
+  }
+}
+
 export const info = {
   route: '/user/info/:name?',
   method: 'get',
   /**
-   * 用户信息
+   * 查询用户信息
    * @param ctx
    * @returns {Promise.<void>}
    */
@@ -73,50 +80,16 @@ export const info = {
       }
     } catch (e) {
       console.log(e)
-      throw e
     }
   }
 }
 
-export const remove = {
-  route: '/user/remove/:name?',
-  method: 'get',
-  action: async (ctx) => {
-    let name = ctx.params.name
-    if (name) {
-      let res = await User.removeByName(name)
-      let ret = res.result
-      if (ret.ok && ret.n) {
-        ctx.body = '用户删除成功'
-      } else {
-        ctx.body = '用户删除失败'
-      }
-    }
-  }
-}
 /**
  * 用户列表
  * @param ctx
  * @returns {Promise.<void>}
  */
-export const list = async (ctx) => {
-  try {
-    let users = await User.findUsers()
-    if (users && users.length) {
-      ctx.body = (() => {
-        let ret = []
-        users.forEach(user => {
-          ret.push(user.name)
-        })
-        return '<p>' + ret.join('</p></p>') + '</p>'
-      })()
-    } else {
-      ctx.body = '不存在任何用户'
-    }
-  } catch(e) {
-    console.log(e)
-  }
-}
+export const list = List
 
 /**
  * 用户首页，自动转向到list
@@ -131,3 +104,16 @@ export default async (ctx) => {
   }
 }
 
+
+// // redis test case
+// import {setCache, getCache, removeCache} from 'utils/cache'
+// setCache('AppName', 'Koa2-Starter')
+//
+// setTimeout(async () => {
+//   let name = await getCache('AppName')
+//   console.log(name)
+//   removeCache('AppName')
+//   setTimeout(async () => {
+//     console.log(await getCache('AppName'))
+//   })
+// }, 2000)
