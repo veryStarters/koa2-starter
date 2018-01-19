@@ -11,7 +11,7 @@ import config from 'config'
 import socket from 'utils/socket'
 import 'utils/mongo'
 import getLogger from 'utils/getLogger'
-const logger  = getLogger('app')
+const logger = getLogger('app')
 const app = new Koa()
 app.use(koaStatic(path.join(__dirname, config.staticPath)))
 app.use(koaViews(path.join(__dirname, './pages'), {
