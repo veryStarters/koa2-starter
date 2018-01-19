@@ -2,6 +2,7 @@ import md5 from 'blueimp-md5'
 import jwt from 'jwt-simple'
 import config from 'config'
 import User from 'models/user'
+import List from './list'
 import getLogger from 'utils/getLogger'
 import getTokenInfo from 'utils/getTokenInfo'
 // // redis test case
@@ -22,26 +23,6 @@ const needNotCheckAuthPath = {
 }
 
 const logger = getLogger('user')
-// user模块私有的middlewares
-export const middlewares = [
-  async (ctx, next) => {
-    let { path, body, query } = ctx.request
-    console.log(path)
-    console.log(md5(path))
-    if (path in needNotCheckAuthPath) {
-      await next()
-      return
-    }
-    let token = body && body.accessToken || query && query.accessToken || ctx.request.headers['AccessToken']
-    let tokenInfo = getTokenInfo(token)
-    if (!tokenInfo) {
-      ctx.body = '没有权限'
-    } else {
-      // 此处可以更加细化权限判断，本demo直接通过
-      await next()
-    }
-  }
-]
 
 /**
  * 创建用户
@@ -73,11 +54,33 @@ export const add = async (ctx) => {
   }
 }
 
+export const remove = {
+  route: '/user/remove/:name?',
+  method: 'get',
+  /**
+   * 删除用户
+   * @param ctx
+   * @returns {Promise.<void>}
+   */
+  action: async (ctx) => {
+    let name = ctx.params.name
+    if (name) {
+      let res = await User.removeByName(name)
+      let ret = res.result
+      if (ret.ok && ret.n) {
+        ctx.body = '用户删除成功'
+      } else {
+        ctx.body = '用户删除失败'
+      }
+    }
+  }
+}
+
 export const info = {
   route: '/user/info/:name?',
   method: 'get',
   /**
-   * 用户信息
+   * 查询用户信息
    * @param ctx
    * @returns {Promise.<void>}
    */
@@ -102,50 +105,17 @@ export const info = {
       }
     } catch (e) {
       console.log(e)
-      throw e
     }
   }
 }
 
-export const remove = {
-  route: '/user/remove/:name?',
-  method: 'get',
-  action: async (ctx) => {
-    let name = ctx.params.name
-    if (name) {
-      let res = await User.removeByName(name)
-      let ret = res.result
-      if (ret.ok && ret.n) {
-        ctx.body = '用户删除成功'
-      } else {
-        ctx.body = '用户删除失败'
-      }
-    }
-  }
-}
 /**
  * 用户列表
  * @param ctx
  * @returns {Promise.<void>}
  */
-export const list = async (ctx) => {
-  try {
-    let users = await User.findUsers()
-    if (users && users.length) {
-      ctx.body = (() => {
-        let ret = []
-        users.forEach(user => {
-          ret.push(user.name)
-        })
-        return '<p>' + ret.join('</p></p>') + '</p>'
-      })()
-    } else {
-      ctx.body = '不存在任何用户'
-    }
-  } catch(e) {
-    console.log(e)
-  }
-}
+export const list = List
+
 
 export const login = async (ctx, next) => {
   try {

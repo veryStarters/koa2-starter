@@ -12,20 +12,6 @@ export default (app, options) => {
   const emptyAction = async (ctx, next) => {
     await next()
   }
-  // 接口层次的私有middleWares只use到最顶层的路由即可
-  const hasUsedMiddleWares = (() => {
-    let routePaths = []
-    return function (routePath) {
-      let ret = false
-      routePaths.forEach(item => {
-        if (routePath.indexOf(item) === 0) {
-          ret = true
-        }
-      })
-      routePaths.push(routePath)
-      return ret
-    }
-  })()
   // 处理页面路由
   koaRouter.get('/*', async (ctx, next) => {
     let reqPath = ctx.request.path
@@ -41,14 +27,14 @@ export default (app, options) => {
     }
     await ctx.render(reqPath.substr(1), query)
   })
-  koaRouter.all('/api', async (ctx, next) => {
+  koaRouter['all']('/api', async (ctx) => {
     ctx.body = 'API List'
   })
   // 注册所有API路由
   registerApiRouter(opt.apiRoot)
 
   // 处理404
-  koaRouter.all('*', async (ctx) => {
+  koaRouter['all']('*', async (ctx) => {
     ctx.status = 404
     await ctx.render('404')
   })
@@ -67,14 +53,6 @@ export default (app, options) => {
     }
   }
 
-  function setMiddleWare(middlewares, routePath) {
-    if (middlewares.length) {
-      if (!hasUsedMiddleWares(routePath)) {
-        koaRouter.use(routePath, middlewares)
-      }
-    }
-  }
-
   function registerApiRouter(apiDir) {
     let apiList = fs.readdirSync(apiDir)
     apiList.forEach(function (api) {
@@ -83,20 +61,14 @@ export default (app, options) => {
       if (stat.isFile()) {
         if (/index\.js$/.test(apiFileName)) {
           let routes = require(apiFileName)
-          let middlewares = routes['middlewares'] || []
           Object.keys(routes).forEach(routeName => {
             let routePath = formatPath(apiFileName)
-            if (routeName === 'middlewares') {
-              return
-            }
             let routeInfo = routes[routeName]
             if (typeof routeInfo === 'function') {
               routePath = fixRoutePath(routePath, routeName)
-              setMiddleWare(middlewares, routePath)
               koaRouter.all(routePath, routeInfo)
             } else if (typeof routeInfo === 'object') {
               routePath = `${opt.apiPrefix}${routeInfo.route}` || fixRoutePath(routePath, routeName)
-              setMiddleWare(middlewares, routePath)
               koaRouter[routeInfo.method ? routeInfo.method : 'post'](routePath, routeInfo.action || emptyAction)
             }
           })
