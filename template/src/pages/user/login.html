@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div class="app-wrapper">
+    <p>
+      <label for="">用户名</label>
+      <input type="text" name="name">
+    </p>
+    <p>
+      <label for="">密码</label>
+      <input type="password" name="password">
+    </p>
+    <p>
+      <button class="login">登录</button>
+    </p>
+
+  </div>
+<script src="/lib/zepto.min.js"></script>
+<script>
+  $(function () {
+    $('.login').click(function () {
+      var name = $('input[name=name]').val()
+      var password = $('input[name=password]').val()
+      $.ajax({
+        url: '/api/user/login',
+        type: 'post',
+        data: {
+          name: name,
+          password: password
+        },
+        success: function (res) {
+          if (res.code === 0 && res.data) {
+            let userInfo = res.data
+            localStorage.setItem('AccessToken', userInfo.accessToken)
+            localStorage.setItem('UserName', userInfo.name)
+            console.log('登录成功')
+            location.href = '/api/user/info/' + userInfo.name + '?accessToken=' + userInfo.accessToken
+          } else {
+            console.log('登录失败！')
+          }
+        }
+      })
+    })
+  })
+</script>
+</body>
+</html>

@@ -1,5 +1,9 @@
+import md5 from 'blueimp-md5'
+import jwt from 'jwt-simple'
+import config from 'config'
 import User from 'models/user'
 import getLogger from 'utils/getLogger'
+import getTokenInfo from 'utils/getTokenInfo'
 // // redis test case
 // import {setCache, getCache, removeCache} from 'utils/cache'
 // setCache('AppName', 'Koa2-Starter')
@@ -13,9 +17,30 @@ import getLogger from 'utils/getLogger'
 //   })
 // }, 2000)
 
+const needNotCheckAuthPath = {
+  '/api/user/login': true
+}
+
 const logger = getLogger('user')
 // user模块私有的middlewares
 export const middlewares = [
+  async (ctx, next) => {
+    let { path, body, query } = ctx.request
+    console.log(path)
+    console.log(md5(path))
+    if (path in needNotCheckAuthPath) {
+      await next()
+      return
+    }
+    let token = body && body.accessToken || query && query.accessToken || ctx.request.headers['AccessToken']
+    let tokenInfo = getTokenInfo(token)
+    if (!tokenInfo) {
+      ctx.body = '没有权限'
+    } else {
+      // 此处可以更加细化权限判断，本demo直接通过
+      await next()
+    }
+  }
 ]
 
 /**
@@ -25,9 +50,9 @@ export const middlewares = [
  */
 export const add = async (ctx) => {
   try {
-    let { name, age } = ctx.request.query
-    if (!name) {
-      logger.info('新增用户信息时缺少name参数')
+    let { name, password} = ctx.request.query
+    if (!name || !password) {
+      logger.info('新增用户信息时缺少关键的name或者password参数')
       ctx.body = '缺少必要的参数'
       return
     }
@@ -37,7 +62,11 @@ export const add = async (ctx) => {
       ctx.body = '已经存在的用户名：' + name
       return
     }
-    let ret = await User.addUser()
+    let ret = await User.addUser({
+      ...ctx.request.query,
+      name: name,
+      password: md5(password)
+    })
     ctx.body = name + '创建' + (ret && ret.name ? '成功' : '失败')
   } catch (e) {
     console.log(e)
@@ -114,6 +143,41 @@ export const list = async (ctx) => {
       ctx.body = '不存在任何用户'
     }
   } catch(e) {
+    console.log(e)
+  }
+}
+
+export const login = async (ctx, next) => {
+  try {
+    let { name, password }  = ctx.request.body
+    if (!name || !password) {
+      ctx.body = '未输入用户名或者密码'
+      return
+    }
+    password = md5(password)
+    let userInfo = await User.findByName(name)
+    if (!userInfo) {
+      ctx.body = '不存在的用户'
+      return
+    }
+    if (userInfo.password !== password) {
+      ctx.body = '密码错误'
+      return
+    }
+    ctx.body = {
+      ret: 'success',
+      code: 0,
+      msg: '登录成功',
+      data: {
+        name: userInfo.name,
+        accessToken: jwt.encode({
+          name: userInfo.name,
+          expires: config.sessionDuration + Date.now()
+        }, config.tokenSecret)
+        // other: something else, such as permissions
+      }
+    }
+  } catch (e) {
     console.log(e)
   }
 }
