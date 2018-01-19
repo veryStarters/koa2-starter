@@ -8,6 +8,7 @@ export default {
   allowedOrigin: {
     'http://localhost:8080': true
   },
+  // 私钥，不要外传
   tokenSecret: 'jc12345678',
   sessionDuration: 60 * 60 * 1000,
   mongodbUri: {

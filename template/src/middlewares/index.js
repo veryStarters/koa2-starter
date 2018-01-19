@@ -4,6 +4,8 @@ import getLogger from 'utils/getLogger'
  */
 export const cors = require('./cors')
 
+export const auth = require('./auth')
+
 /**
  * 导出本地定义中间件
  * @param ctx

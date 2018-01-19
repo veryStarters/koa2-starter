@@ -1,29 +1,9 @@
 import md5 from 'blueimp-md5'
-import jwt from 'jwt-simple'
-import config from 'config'
 import User from 'models/user'
 import List from './list'
+import Login from './login'
 import getLogger from 'utils/getLogger'
-import getTokenInfo from 'utils/getTokenInfo'
-// // redis test case
-// import {setCache, getCache, removeCache} from 'utils/cache'
-// setCache('AppName', 'Koa2-Starter')
-//
-// setTimeout(async () => {
-//   let name = await getCache('AppName')
-//   console.log(name)
-//   removeCache('AppName')
-//   setTimeout(async () => {
-//     console.log(await getCache('AppName'))
-//   })
-// }, 2000)
-
-const needNotCheckAuthPath = {
-  '/api/user/login': true
-}
-
 const logger = getLogger('user')
-
 /**
  * 创建用户
  * @param ctx
@@ -117,40 +97,7 @@ export const info = {
 export const list = List
 
 
-export const login = async (ctx, next) => {
-  try {
-    let { name, password }  = ctx.request.body
-    if (!name || !password) {
-      ctx.body = '未输入用户名或者密码'
-      return
-    }
-    password = md5(password)
-    let userInfo = await User.findByName(name)
-    if (!userInfo) {
-      ctx.body = '不存在的用户'
-      return
-    }
-    if (userInfo.password !== password) {
-      ctx.body = '密码错误'
-      return
-    }
-    ctx.body = {
-      ret: 'success',
-      code: 0,
-      msg: '登录成功',
-      data: {
-        name: userInfo.name,
-        accessToken: jwt.encode({
-          name: userInfo.name,
-          expires: config.sessionDuration + Date.now()
-        }, config.tokenSecret)
-        // other: something else, such as permissions
-      }
-    }
-  } catch (e) {
-    console.log(e)
-  }
-}
+export const login = Login
 
 /**
  * 用户首页，自动转向到list
@@ -165,3 +112,15 @@ export default async (ctx) => {
   }
 }
 
+// redis test case
+// import {setCache, getCache, removeCache} from 'utils/cache'
+// setCache('AppName', 'Koa2-Starter')
+//
+// setTimeout(async () => {
+//   let name = await getCache('AppName')
+//   console.log(name)
+//   removeCache('AppName')
+//   setTimeout(async () => {
+//     console.log(await getCache('AppName'))
+//   })
+// }, 2000)
