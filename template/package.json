@@ -49,7 +49,6 @@
     "config": "./src/config",
     "models": "./src/models/",
     "utils": "./src/utils/",
-    "schemas": "./src/schemas/",
     "controllers": "./src/controllers/",
     "business": "./src/business/"
   }

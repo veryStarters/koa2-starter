@@ -23,8 +23,8 @@
 <script>
   $(function () {
     $('.login').click(function () {
-      var name = $('input[name=name]').val()
-      var password = $('input[name=password]').val()
+      let name = $('input[name=name]').val()
+      let password = $('input[name=password]').val()
       $.ajax({
         url: '/api/user/login',
         type: 'post',

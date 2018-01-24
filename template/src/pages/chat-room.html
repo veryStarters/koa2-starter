@@ -13,43 +13,37 @@
   </style>
 </head>
 <body>
-<h1>迷你IM</h1>
-<p style="color: #aaa; font-size: 12px">PS: 复制当前地址，打开另外一个浏览器标签访问看看</p>
-<p>聊天内容：<input type="text" name="content"/> <input type="button" value="发送" id="send"/></p>
+  <h1>迷你IM</h1>
+  <p style="color: #aaa; font-size: 12px">PS: 复制当前地址，打开另外一个浏览器标签访问看看</p>
+  <p>聊天内容：<input type="text" name="content"/> <input type="button" value="发送" id="send"/></p>
 
-<div class="content">
-
-</div>
+  <div class="content"></div>
+  <script src="/lib/zepto.min.js"></script>
+  <script type="text/javascript">
+    /* 封装 WebSocket 实例化的方法  */
+    let initWebSocket = function (urlValue) {
+      if (window.WebSocket) return new WebSocket(urlValue)
+      if (window.MozWebSocket) return new MozWebSocket(urlValue)
+      return false
+    }
+    let webSocket = initWebSocket("ws://localhost:9999/websocket")
+    if (!webSocket) {
+      console.log('当前浏览器不支持websocket！')
+    } else {
+      webSocket.onmessage = function (msg) {
+        $('.content').append(`<p>${msg.data}</p>`)
+      }
+      webSocket.onclose = function () {
+        console.log("关闭连接")
+      }
+      $("#send").click(function () {
+        let $content = $('input[name=content]')
+        webSocket.send(JSON.stringify({
+          content: $content.val()
+        }))
+        $content.val('')
+      })
+    }
+  </script>
 </body>
-<script type="text/javascript">
-  /* 封装 WebSocket 实例化的方法  */
-  let initWebSocket = function (urlValue) {
-    if (window.WebSocket) return new WebSocket(urlValue)
-    if (window.MozWebSocket) return new MozWebSocket(urlValue)
-    return false
-  }
-  let $ = function (select) {
-    return document.querySelector(select)
-  }
-  let webSocket = initWebSocket("ws://localhost:9999/websocket")
-  if (!webSocket) {
-    console.log('当前浏览器不支持websocket！')
-  } else {
-    webSocket.onmessage = function (msg) {
-      let p = document.createElement('P')
-      p.innerHTML = msg.data
-      $('.content').appendChild(p)
-    }
-    webSocket.onclose = function () {
-      console.log("关闭连接")
-    }
-    $("#send").onclick = function () {
-      let $content = $('input[name=content]')
-      webSocket.send(JSON.stringify({
-        content: $content.value
-      }))
-      $content.value = ''
-    }
-  }
-</script>
 </html>
