@@ -39,7 +39,6 @@ UserSchema.method({
 
 /**
  * 定义模型静态方法
- * @type {{findByName: mongoose.Schema.statics.findByName, findUsers: mongoose.Schema.statics.findUsers, addUser: mongoose.Schema.statics.addUser, removeByName: mongoose.Schema.statics.removeByName}}
  */
 UserSchema.statics = {
   findByName: function (name) {
