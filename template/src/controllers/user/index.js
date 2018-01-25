@@ -114,13 +114,18 @@ export default async (ctx) => {
 
 // redis test case
 // import {setCache, getCache, removeCache} from 'utils/cache'
-// setCache('AppName', 'Koa2-Starter')
+// setCache('AppName', 'Koa2-Starter', 1)
 //
 // setTimeout(async () => {
 //   let name = await getCache('AppName')
-//   console.log(name)
-//   removeCache('AppName')
+//   console.log(name, 1)
 //   setTimeout(async () => {
-//     console.log(await getCache('AppName'))
+//     console.log(await getCache('AppName'), 2)
+//   }, 1000)
+//   removeCache('AppName').then(() => {
+//     console.log('删除成功')
 //   })
-// }, 2000)
+//   setTimeout(async () => {
+//     console.log(await getCache('AppName'), 3)
+//   })
+// }, 500)
