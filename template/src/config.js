@@ -1,5 +1,3 @@
-// 控制台log颜色
-import 'colors'
 export default {
   port: 9090,
   needSocket: true,

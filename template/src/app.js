@@ -1,5 +1,4 @@
 import 'module-alias/register'
-import 'babel-polyfill'
 import Koa from 'koa'
 import koaStatic from 'koa-static'
 import koaBody from 'koa-body'
@@ -32,10 +31,10 @@ dispatcher(app, {
   viewExt: 'html'
 })
 app.listen(config.port || 9090, () => {
-  logger.info('HTTP服务启动成功，请访问: '.green, 'http://localhost:' + (config.port || 9090))
+  logger.info('HTTP服务启动成功, 请访问: ', 'http://localhost:' + (config.port || 9090))
 })
 if (config.needSocket) {
   socket.listen(config.socketPort || 9999, () => {
-    logger.info('SOCKET服务启动成功，请访问: '.green, 'http://localhost:' + (config.port || 9090) + '/chat-room')
+    logger.info('SOCKET服务启动成功, 请访问: ', 'http://localhost:' + (config.port || 9090) + '/chat-room')
   })
 }
