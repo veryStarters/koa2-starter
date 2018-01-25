@@ -6,13 +6,15 @@
 请预先安装 mongo，如有缓存需求，请安装redis，系统都已经内置对应数据库的访问功能
 
 ```
-vue init veryStarter/koa2-starter myProject
-
-cd myProject
-
-yarn install
-
-yarn start
+  npm i -g vue-cli
+  
+  vue init veryStarter/koa2-starter myProject
+  
+  cd myProject
+  
+  yarn install
+  
+  yarn start
 
 ```
 
