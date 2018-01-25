@@ -5,6 +5,7 @@ export default {
   needSocket: true,
   socketPort: 9999,
   staticPath: 'static',
+  needAuth: false,
   allowedOrigin: {
     'http://localhost:8080': true
   },

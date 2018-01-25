@@ -1,4 +1,5 @@
 // import User from 'models/user'
+import config from 'config'
 import getTokenInfo from 'utils/getTokenInfo'
 
 // 无需权限校验的api
@@ -6,6 +7,10 @@ const needNotCheckAuthPath = {
   '/api/user/login': true
 }
 export default async (ctx, next) => {
+  if (!config.needAuth) {
+    await next()
+    return
+  }
   let { path, body, query } = ctx.request
   if (path in needNotCheckAuthPath || (path.indexOf('/api') !== 0 )) {
     await next()
