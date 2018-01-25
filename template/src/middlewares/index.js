@@ -18,10 +18,10 @@ export const requestLog = async (ctx, next) => {
   let ms = new Date() - start
   let logger = getLogger('request ')
   let resLogger = getLogger('response')
-  let {method, url, status, body} = ctx
-  logger.info(`${method} ${decodeURIComponent(url)} ${status} ${ms}ms ${ctx.request.headers['user-agent']}`)
+  let {method, url, query} = ctx.request
+  logger.info(`${method} ${decodeURIComponent(url)} ${ctx.status} ${ms}ms ${JSON.stringify(query || {})}`)  // ${ctx.request.headers['user-agent']}
   if (url.indexOf('/api') === 0) {
-    resLogger.info(`${typeof body === 'object' ? JSON.stringify(body) : body }`)
+    resLogger.info(`${typeof ctx.body === 'object' ? JSON.stringify(ctx.body) : ctx.body }`)
   }
 }
 

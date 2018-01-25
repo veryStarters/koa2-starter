@@ -1,4 +1,3 @@
-import 'module-alias/register'
 import Koa from 'koa'
 import koaStatic from 'koa-static'
 import koaBody from 'koa-body'

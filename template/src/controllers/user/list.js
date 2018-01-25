@@ -3,15 +3,17 @@ export default async (ctx) => {
   try {
     let users = await User.findUsers()
     if (users && users.length) {
-      ctx.body = (() => {
-        let ret = []
-        users.forEach(user => {
-          ret.push(user.name)
-        })
-        return '<p>' + ret.join('</p></p>') + '</p>'
-      })()
+      ctx.body = {
+        code: 0,
+        msg: '',
+        data: users
+      }
     } else {
-      ctx.body = '不存在任何用户'
+      ctx.body = {
+        code: -1,
+        msg: '不存在任何用户',
+        data: []
+      }
     }
   } catch(e) {
     console.log(e)
