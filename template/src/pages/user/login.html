@@ -37,7 +37,7 @@
             let userInfo = res.data
             localStorage.setItem('AccessToken', userInfo.accessToken)
             localStorage.setItem('UserName', userInfo.name)
-            console.log('登录成功')
+            console.log('登录成功!')
             location.href = '/api/user/info/' + userInfo.name + '?accessToken=' + userInfo.accessToken
           } else {
             console.log('登录失败！')
