@@ -20,6 +20,8 @@ koa-views, mongodb, websocket等常用功能模块，且对koa-router进行了�
   yarn install
   
   yarn start
+  
+  yarn deploy  // 采用pm2部署
 
 ```
 在浏览器中输入http://localhost:9090即可访问

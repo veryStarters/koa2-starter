@@ -2,9 +2,9 @@ import jwt from 'jwt-simple'
 import config from 'config'
 import md5 from 'blueimp-md5'
 import User from 'models/user'
-export default async (ctx, next) => {
+export default async (ctx) => {
   try {
-    let { name, password }  = ctx.request.body
+    let { name, password } = ctx.request.body
     if (!name || !password) {
       ctx.body = '未输入用户名或者密码'
       return
