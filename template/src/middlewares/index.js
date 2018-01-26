@@ -1,3 +1,4 @@
+import config from 'config'
 import getLogger from 'utils/getLogger'
 /**
  * 导出外部中间件
@@ -20,7 +21,7 @@ export const requestLog = async (ctx, next) => {
   let resLogger = getLogger('response')
   let {method, url, query} = ctx.request
   logger.info(`${method} ${decodeURIComponent(url)} ${ctx.status} ${ms}ms ${JSON.stringify(query || {})}`)  // ${ctx.request.headers['user-agent']}
-  if (url.indexOf('/api') === 0) {
+  if (url.indexOf(config.apiPrefix) === 0) {
     resLogger.info(`${typeof ctx.body === 'object' ? JSON.stringify(ctx.body) : ctx.body }`)
   }
 }

@@ -1,33 +1,34 @@
 import fs from 'fs'
 import path from 'path'
 import KoaRouter from 'koa-router'
+import config from 'config'
 export default (app, options) => {
   let opt = Object.assign({
-    apiPrefix: '/api',
+    apiPrefix: config.apiPrefix,
     apiRoot: path.join(__dirname, 'controllers/'),
     viewRoot: path.join(__dirname, 'pages/'),
     viewExt: 'html'
   }, options || {})
+  let pagePrefix = config.pagePrefix
   let koaRouter = new KoaRouter()
   const emptyAction = async (ctx, next) => {
     await next()
   }
   // 处理页面路由
-  koaRouter.get('/*', async (ctx, next) => {
+  koaRouter.get(pagePrefix + '*', async (ctx, next) => {
     let reqPath = ctx.request.path
-    if(reqPath === '/') {
-      reqPath = '/index'
+    if(reqPath === pagePrefix || reqPath === pagePrefix + '/') {
+      reqPath = pagePrefix + '/index'
     }
     let query = ctx.request.query
-    if (reqPath.indexOf(opt.apiPrefix) === 0) {
+    let pagePath = reqPath.substr(pagePrefix.length + 1)
+    if (!fs.existsSync(path.join(opt.viewRoot, `${pagePath}.${opt.viewExt}`))) {
       return next()
     }
-    if (!fs.existsSync(path.join(opt.viewRoot, `${reqPath}.${opt.viewExt}`))) {
-      return next()
-    }
-    await ctx.render(reqPath.substr(1), query)
+    await ctx.render(pagePath, query)
   })
-  koaRouter['all']('/api', async (ctx) => {
+
+  koaRouter['all'](config.apiPrefix, async (ctx) => {
     ctx.body = 'API List'
   })
   // 注册所有API路由

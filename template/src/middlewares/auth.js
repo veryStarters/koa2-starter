@@ -12,7 +12,7 @@ export default async (ctx, next) => {
     return
   }
   let { path, body, query } = ctx.request
-  if (path in needNotCheckAuthPath || (path.indexOf('/api') !== 0 )) {
+  if (path in needNotCheckAuthPath || (path.indexOf(config.apiPrefix) !== 0 )) {
     await next()
     return
   }

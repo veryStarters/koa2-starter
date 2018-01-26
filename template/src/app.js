@@ -1,3 +1,5 @@
+import 'babel-polyfill'
+import 'module-alias/register'
 import Koa from 'koa'
 import koaStatic from 'koa-static'
 import koaBody from 'koa-body'
@@ -24,7 +26,7 @@ Object.values(middleWares).forEach(middleWare => {
   app.use(middleWare)
 })
 dispatcher(app, {
-  apiPrefix: '/api',
+  apiPrefix: config.apiPrefix,
   apiRoot: path.join(__dirname, 'controllers/'),
   viewRoot: path.join(__dirname, 'pages/'),
   viewExt: 'html'

@@ -3,6 +3,7 @@ import User from 'models/user'
 import List from './list'
 import Login from './login'
 import getLogger from 'utils/getLogger'
+import config from 'config'
 const logger = getLogger('user')
 /**
  * 创建用户
@@ -106,7 +107,7 @@ export const login = Login
  */
 export default async (ctx) => {
   try {
-    ctx.redirect('/api/user/list')
+    ctx.redirect(config.apiPrefix + '/user/list')
   } catch (e) {
     console.log(e)
   }
