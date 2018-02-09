@@ -17,7 +17,7 @@ controllerWatcher.on('add', function (file) {
   }
 })
 modelWatcher.on('add', function (file) {
-  let match = file.match(/\/(\w+)\.js$/)
+  let match = file.match(/\/models\/(.*)\.js$/)
   if (match && match[1]) {
     let stat = fs.statSync(file)
     if (!stat.size) {
@@ -26,9 +26,7 @@ modelWatcher.on('add', function (file) {
         if (err) {
           return
         }
-        let name = match[1].replace(/^[a-z]/, function (s) {
-          return s.toUpperCase()
-        })
+        let name = formatPathToName(match[1])
         fs.write(fd,
           modelTpl.replace(/__modelName__/g, name),
           function (err) {
@@ -39,3 +37,11 @@ modelWatcher.on('add', function (file) {
     }
   }
 })
+
+function formatPathToName(path) {
+  // path = 'abc/def/jdk' > name = AbcDefJdk
+  if (!path) return
+  return path.replace(/(?:^[a-z])|(\/[a-z])/g, (s) => {
+    return s.toUpperCase()
+  }).replace(/\//g, '')
+}

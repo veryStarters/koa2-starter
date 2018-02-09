@@ -50,13 +50,15 @@ koa-views, mongodb, websocket等常用功能模块，且对koa-router进行了�
 
 1、在controllers中创建模块文件夹，如user，在其中创建index.js文件，稍等片刻，系统会自动创建index.js文件的基本骨架
 
+2、在models中创建任何一个js文件，都会自动填充以该文件所在目录层级命名的model骨架
+
 2、在index.js文件中，默认包含了增删查改四个action的基本框架，可选择使用，如无需对应接口，则删除改action即可
 
-3、接口默认访问规则为/api/module/action, 如上述user, 要想访问add接口，接口地址为/api/user/add
+3、接口默认访问规则为/api/:module/:action, 如上述user, 要想访问add接口，接口地址为/api/user/add
 
 4、若有自定义访问规则，则修改对应action为一个对象，其中包含route，method和action等属性，具体请参见user/info这个action
 
-5、若接口有权限校验需求，可在config.js中配置needAuth为TRUE，并在middleswares/auth.js文件中统一处理对应的权限，不建议每个action单独处理
+5、若接口有权限校验需求，可在config.js中配置needAuth为TRUE，并在middleswares/auth.js文件中统一处理对应的权限，不建议在每个action单独处理
 
     
     
