@@ -10,7 +10,7 @@ const __modelName__Schema = new mongoose.Schema({
 /**
  * 定义存储拦截器
  */
-__modelName__Schema.pre("save",function(next) {
+__modelName__Schema.pre("save", (next) => {
   next()
 })
 
@@ -18,7 +18,7 @@ __modelName__Schema.pre("save",function(next) {
  * 定义模型实例方法
  */
 __modelName__Schema.method({
-  log: function() {
+  log() {
     console.log('Hello, World!')
   }
 })
@@ -27,7 +27,7 @@ __modelName__Schema.method({
  * 定义模型静态方法
  */
 __modelName__Schema.statics = {
-  findById: function (id) {
+  findById(id) {
     return this.findOne({_id: id})
   }
 }

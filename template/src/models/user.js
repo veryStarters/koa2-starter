@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
 /**
  * 定义存储拦截器
  */
-UserSchema.pre("save",function(next){
+UserSchema.pre("save", (next) => {
   if(this.isNew) {
     this.createTime = this.upDateTime = Date.now()
   } else {
@@ -32,7 +32,7 @@ UserSchema.pre("save",function(next){
  * 定义模型实例方法
  */
 UserSchema.method({
-  getName: function () {
+  getName() {
     return this.name
   }
 })
@@ -41,16 +41,16 @@ UserSchema.method({
  * 定义模型静态方法
  */
 UserSchema.statics = {
-  findByName: function (name) {
+  findByName(name) {
     return this.findOne({name: name})
   },
-  findUsers: function () {
+  findUsers() {
     return this.find()
   },
-  addUser: function (userInfo) {
+  addUser(userInfo) {
     return this.create(userInfo)
   },
-  removeByName: function (name) {
+  removeByName(name) {
     return this.remove({name: name})
   }
 }

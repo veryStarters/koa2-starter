@@ -10,7 +10,7 @@ const AnimalTigerSchema = new mongoose.Schema({
 /**
  * 定义存储拦截器
  */
-AnimalTigerSchema.pre("save",function(next) {
+AnimalTigerSchema.pre("save", (next) => {
   next()
 })
 
@@ -18,7 +18,7 @@ AnimalTigerSchema.pre("save",function(next) {
  * 定义模型实例方法
  */
 AnimalTigerSchema.method({
-  log: function() {
+  log() {
     console.log('Hello, World!')
   }
 })
@@ -27,7 +27,7 @@ AnimalTigerSchema.method({
  * 定义模型静态方法
  */
 AnimalTigerSchema.statics = {
-  findById: function (id) {
+  findById(id) {
     return this.findOne({_id: id})
   }
 }
