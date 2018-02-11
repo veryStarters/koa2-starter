@@ -1,4 +1,4 @@
-/**,
+module.exports = `/**
  * 本文件为controller模板文件, 由脚手架自动生成，内置增、删、查、改等几个常用action。
  * 如不需要其中的某些接口action，直接删除即可
  * 默认情况下，路由规则为目录名称加action名，且action为async包裹的方法。
@@ -10,7 +10,7 @@
 /**
  * 增
  * @param ctx
- * @returns {Promise.<void>}
+ * @returns {Promise}
  */
 export const create = async (ctx) => {
   try {
@@ -21,12 +21,12 @@ export const create = async (ctx) => {
 }
 
 /**
- * 删
+ *
  * @param ctx
- * @returns {Promise.<void>}
+ * @returns {Promise}
  */
 export const del = {
-  route: '/xxx/del/:id?',
+  route: '__delPrefixPath__/del/:id?',
   method: 'get',
   action: async (ctx) => {
     try {
@@ -40,7 +40,7 @@ export const del = {
 /**
  * 查
  * @param ctx
- * @returns {Promise.<void>}
+ * @returns {Promise}
  */
 export const info = async (ctx) => {
   try {
@@ -53,7 +53,7 @@ export const info = async (ctx) => {
 /**
  * 改
  * @param ctx
- * @returns {Promise.<void>}
+ * @returns {Promise}
  */
 export const update = async (ctx) => {
   try {
@@ -66,7 +66,7 @@ export const update = async (ctx) => {
 /**
  * 默认，通常为list
  * @param ctx
- * @returns {Promise.<void>}
+ * @returns {Promise}
  */
 export default async ctx => {
   try {
@@ -75,3 +75,5 @@ export default async ctx => {
     console.log(e)
   }
 }
+
+`

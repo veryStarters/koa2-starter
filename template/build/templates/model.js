@@ -1,4 +1,7 @@
-module.exports = `import mongoose from 'mongoose'
+module.exports = `/**
+ * 本文件为model模板文件, 由脚手架自动生成，内置模型定义骨架，包含存储拦截器及实例和静态方法定义
+ */
+import mongoose from 'mongoose'
 
 /**
  * 定义模型数据骨架
