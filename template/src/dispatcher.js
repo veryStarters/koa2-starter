@@ -3,25 +3,25 @@ import path from 'path'
 import KoaRouter from 'koa-router'
 import config from 'config'
 export default (app, options) => {
-  let opt = Object.assign({
-    apiPrefix: config.apiPrefix,
+  const opt = Object.assign({
+    apiPrefix: config.apiPrefix || '/api',
+    pagePrefix: config.pagePrefix || '',
     apiRoot: path.join(__dirname, 'controllers/'),
     viewRoot: path.join(__dirname, 'pages/'),
     viewExt: 'html'
   }, options || {})
-  let pagePrefix = config.pagePrefix
-  let koaRouter = new KoaRouter()
+  const koaRouter = new KoaRouter()
   const emptyAction = async (ctx, next) => {
     await next()
   }
   // 处理页面路由
-  koaRouter.get(pagePrefix + '*', async (ctx, next) => {
+  koaRouter.get(opt.pagePrefix + '*', async (ctx, next) => {
     let reqPath = ctx.request.path
-    if(reqPath === pagePrefix || reqPath === pagePrefix + '/') {
-      reqPath = pagePrefix + '/index'
+    if(reqPath === opt.pagePrefix || reqPath === opt.pagePrefix + '/') {
+      reqPath = opt.pagePrefix + '/index'
     }
     let query = ctx.request.query
-    let pagePath = reqPath.substr(pagePrefix.length + 1)
+    let pagePath = reqPath.substr(opt.pagePrefix.length + 1)
     if (!fs.existsSync(path.join(opt.viewRoot, `${pagePath}.${opt.viewExt}`))) {
       return next()
     }
@@ -46,14 +46,25 @@ export default (app, options) => {
     return fileName.replace(/.*\/controllers\//, '').replace(/\/index\.js$/, '');
   }
 
+  /**
+   * 处理首页或者默认页
+   * @param routePath
+   * @param routeName
+   * @returns {string}
+   */
   function fixRoutePath(routePath, routeName) {
+    let pre = `${opt.apiPrefix}/${routePath}`
     if (routeName === 'index' || routeName === 'default') {
-      return `${opt.apiPrefix}/${routePath}`
+      return pre
     } else {
-      return `${opt.apiPrefix}/${routePath}/${routeName}`
+      return `${pre}/${routeName}`
     }
   }
 
+  /**
+   * 遍历apiDir并注册
+   * @param apiDir
+   */
   function registerApiRouter(apiDir) {
     let apiList = fs.readdirSync(apiDir)
     apiList.forEach(function (api) {
