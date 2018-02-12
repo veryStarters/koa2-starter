@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development node build/server-watch.js & nodemon --inspect src/main.js --exec \"eslint ./src/controllers && node\"",
-    "deploy": "cross-env NODE_ENV=production pm2 start src/main.js --name \"koa2Starter\" --max-memory-restart 400M"
+    "deploy": "cross-env NODE_ENV=production pm2 start src/main.js --name \"koa2Starter\" --max-memory-restart 400M",
+    "test": "jest"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -38,6 +39,7 @@
     "chokidar": "^1.7.0",
     "cross-env": "^5.1.1",
     "eslint": "^4.16.0",
+    "jest": "^22.2.2",
     "mkdirp": "^0.5.1",
     "nodemon": "^1.12.1",
     "readline": "^1.3.0",
@@ -53,5 +55,16 @@
     "utils": "./src/utils/",
     "controllers": "./src/controllers/",
     "business": "./src/business/"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1",
+      "^utils/(.*)$": "<rootDir>/src/utils/$1",
+      "^models/(.*)$": "<rootDir>/src/models/$1",
+      "^config$": "<rootDir>/src/config.js",
+      "^business/(.*)$": "<rootDir>/src/business/$1",
+      "^middlewares/(.*)$": "<rootDir>/src/middlewares/$1",
+      "^controllers/(.*)$": "<rootDir>/src/controllers/$1"
+    }
   }
 }

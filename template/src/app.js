@@ -9,7 +9,7 @@ import * as middleWares from './middlewares'
 import dispatcher from './dispatcher'
 import config from 'config'
 import socket from 'utils/socket'
-import 'utils/mongo'
+import mongoConnect from 'utils/mongo'
 import getLogger from 'utils/getLogger'
 const logger = getLogger('app')
 const app = new Koa()
@@ -39,3 +39,5 @@ if (config.needSocket) {
     logger.info('SOCKET服务启动成功, 请访问: ', 'http://localhost:' + (config.port || 9090) + '/chat-room')
   })
 }
+// 连接数据库
+mongoConnect()
