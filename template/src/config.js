@@ -12,6 +12,7 @@ export default {
   // 私钥，不要外传
   tokenSecret: 'jc12345678',
   sessionDuration: 60 * 60 * 1000,
+  needMongodb: true,
   mongodbUri: {
     development: 'mongodb://127.0.0.1/demo',
     test: 'mongodb://127.0.0.1/demo',

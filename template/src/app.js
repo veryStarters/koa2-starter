@@ -40,4 +40,4 @@ if (config.needSocket) {
   })
 }
 // 连接数据库
-mongoConnect()
+config.needMongodb && mongoConnect()
